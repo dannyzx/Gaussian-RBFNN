@@ -177,9 +177,9 @@ class GRBF_NN_C:
         f = 1. / (1. + torch.exp(-S)) 
         return f
     
-    def feature_importance(self, X, P, features_names):
+    def feature_importance(self, X, P):
         
-        lambdas, U = eigh(P)
-        UL = np.dot(np.abs(U), lambdas)
-        FI = UL/sum(UL)
-        return FI, lambdas, U
+        gammas, V = eigh(P)
+        feature_importance = np.dot(np.abs(V), gammas)
+        feature_importance = feature_importance / sum(feature_importance)
+        return feature_importance, gammas, V
