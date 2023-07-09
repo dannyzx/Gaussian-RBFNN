@@ -169,10 +169,6 @@ class GRBF_NN_C:
         loss =  err + self.gaussian_regularizer * reg_l + self.weights_regularizer * reg_w +self.centers_regularizer * reg_c
         return loss, params
         
-    def loss_validation(self, X, X_val, y_val, centers, w, P):
-        y_val_pred = np.asarray([self.predict(x, P, w, centers, X)  for x in X_val])
-        val_loss = sum((y_val_pred - y_val)**2)
-        return val_loss
 
     def predict(self, X, centers, w, P):
         
