@@ -184,5 +184,5 @@ class GRBF_NN_R:
         gammas, V = eigh(P)
         feature_importance = np.dot(np.abs(V), gammas)
         feature_importance = feature_importance / sum(feature_importance)
-        return feature_importance, gammas, V
+        return feature_importance, gammas[::-1], V[:, ::-1]
     
