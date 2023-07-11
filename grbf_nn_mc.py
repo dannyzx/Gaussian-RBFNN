@@ -16,21 +16,22 @@ torch.set_default_dtype(torch.float64)
 class GRBF_NN_MC:
     
     def __init__(self, n_neurons,  
-                 opt_method,
-                 batch_size,
-                 centers_training,
-                 centers_strategy, n_iter,learning_rate,
-                 gaussian_regularizer,
-                 weights_regularizer,
-                 centers_regularizer,
-                 patience, verbose, seed):
+                 opt_method='adam',
+                 batch_size=None,
+                 centers_training=False,
+                 centers_strategy='kmeans', 
+                 n_epochs=10000, learning_rate=1e-3,
+                 gaussian_regularizer=1e-3,
+                 weights_regularizer=1e-3,
+                 centers_regularizer=1e-3,
+                 patience=10, verbose=False, seed=0):
         
         self.opt_method = opt_method
         self.batch_size= batch_size
         self.M = n_neurons
         self.centers_training = centers_training
         self.centers_strategy = centers_strategy
-        self.n_iter = n_iter
+        self.n_epochs = n_epochs
         self.learning_rate = learning_rate
         self.gaussian_regularizer = gaussian_regularizer
         self.weights_regularizer = weights_regularizer
@@ -75,7 +76,7 @@ class GRBF_NN_MC:
         convergence_fun = []
         count_f_no_impr = 0
         del X, y
-        for j in range(self.n_iter):
+        for j in range(self.n_epochs):
             
             for batch_index, batch in enumerate(loader):
                 start = time.time()
@@ -89,12 +90,11 @@ class GRBF_NN_MC:
                 if self.verbose == True:
                     
                     print('Epoch {:4d}/{} Batch {}/{} Cost: {:.6f}'.format(
-                        j, self.n_iter, batch_index+1, len(loader),
+                        j, self.n_epochs, batch_index+1, len(loader),
                         loss.item()
                         ))
                     print('time: ',"{:.5f}".format(end-start))
-                # print('iter: ', j,  'loss: ', "{:.5f}".format(fun), 
-                #       'time: ',"{:.5f}".format(end-start))
+                    
             convergence_fun.append(fun)
             if math.isnan(fun) == True:
                 break
@@ -163,25 +163,23 @@ class GRBF_NN_MC:
         L[idx[0], idx[1]] = l
         P = torch.matmul(L, L.T)
         Phi = self.design_matrix(X, centers, P)
-        #print(-Phi @ w)
         y_hat = torch.nn.functional.softmax(Phi @ w, dim=1)
-        #print(y_hat)
         cr_loss = torch.nn.CrossEntropyLoss()
         err = cr_loss(y_hat, y)
         reg_l =  torch.linalg.norm(L)
         reg_c = torch.linalg.norm(centers)
         reg_w = torch.linalg.norm(w)
-        loss = err + self.gaussian_regularizer * reg_l + self.weights_regularizer * reg_w +self.centers_regularizer * reg_c
+        loss = err + self.gaussian_regularizer * reg_l + self.weights_regularizer * reg_w + self.centers_regularizer * reg_c
         return loss, params
 
-    def predict(self, X, centers, w, P):
-        
+    def predict(self, X, parameters):
+        centers, w, P = parameters[0], parameters[1], parameters[2]
         Phi = self.design_matrix(X, centers, P)
         S = Phi @ w
-        f = torch.nn.functional.softmax(S, dim=1)
-        return f
+        y_hat = torch.nn.functional.softmax(S, dim=1)
+        return y_hat
     
-    def feature_importance(self, X, P):
+    def feature_importance(self, P):
         
         gammas, V = eigh(P)
         feature_importance = np.dot(np.abs(V), gammas)
