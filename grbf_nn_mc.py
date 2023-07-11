@@ -50,7 +50,7 @@ class GRBF_NN_MC:
         if self.centers_training == True:
             n_params = int(self.M * self.C + self.D + self.D * (self.D - 1) / 2)
             centers = None
-            kmeans = KMeans(n_clusters=self.M, random_state=seed, n_init='auto').fit(X)
+            kmeans = KMeans(n_clusters=self.M, random_state=self.seed, n_init='auto').fit(X)
             centers_init = torch.from_numpy(kmeans.cluster_centers_).flatten()
             #centers_init = X[torch.randperm(self.N)[:self.M]].flatten()
             params = torch.cat((centers_init, torch.randn(n_params)))
@@ -58,7 +58,7 @@ class GRBF_NN_MC:
         else:
             n_params = int(self.M * self.C + self.D + self.D * (self.D - 1) / 2)
             if self.centers_strategy == 'k-means':
-                kmeans = KMeans(n_clusters=self.M, random_state=seed, n_init='auto').fit(X)
+                kmeans = KMeans(n_clusters=self.M, random_state=self.seed, n_init='auto').fit(X)
                 centers = torch.from_numpy(kmeans.cluster_centers_)
             if self.centers_strategy == 'random':
                 centers = X[torch.randperm(self.N)[:self.M]].flatten()
