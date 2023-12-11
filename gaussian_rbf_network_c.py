@@ -19,16 +19,20 @@ class GaussianRBFNetworkC(nn.Module):
 
         if self.centers == None:
             self.centers = nn.Parameter(torch.randn(self.n_centers, self.n_features))
+        else:
+            self.centers_regularizer = 1e-16
         
         
         self.weights = nn.Parameter(torch.randn(self.n_centers))
     
     def compute_precision(self, precision_elements):
+        
         lower_tri = torch.zeros((self.n_features, self.n_features))
         idx = torch.tril_indices(*lower_tri.shape)
         lower_tri[idx[0], idx[1]] = self.precision_elements
         precision_matrix = torch.matmul(lower_tri, lower_tri.T)
         return precision_matrix
+    
     def forward(self, X):
         
 
