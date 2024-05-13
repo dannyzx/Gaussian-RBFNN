@@ -1,5 +1,20 @@
 # Learning Active Subspaces and Discovering Important Features with Gaussian Radial Basis Functions Neural Networks
 This repository contains the code for the paper titled "Learning Active Subspaces and Discovering Important Features with Gaussian Radial Basis Functions Neural Networks". 
+## Citation
+```python
+@article{DAGOSTINO2024106335,
+title = {Learning active subspaces and discovering important features with Gaussian radial basis functions neural networks},
+journal = {Neural Networks},
+volume = {176},
+pages = {106335},
+year = {2024},
+issn = {0893-6080},
+doi = {https://doi.org/10.1016/j.neunet.2024.106335},
+url = {https://www.sciencedirect.com/science/article/pii/S0893608024002594},
+author = {Danny D’Agostino and Ilija Ilievski and Christine Annette Shoemaker},
+keywords = {Explainable AI, Supervised learning, Dimensionality reduction, Feature selection, Radial Basis Function Neural Networks, Active subspace},
+}
+```
 ## Abstract
 Providing a model that achieves a strong predictive performance and at the same time is
 interpretable by humans is one of the most difficult challenges in machine learning research due to the
