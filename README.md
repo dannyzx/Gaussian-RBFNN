@@ -1,5 +1,13 @@
-# Learning Active Subspaces and Discovering Important Features with Gaussian Radial Basis Functions Neural Networks
-This repository contains the code for the paper titled "Learning Active Subspaces and Discovering Important Features with Gaussian Radial Basis Functions Neural Networks". 
+# Gaussian Radial Basis Functions Neural Networks (GRBFNNs)
+The repository contains the code for the paper titled "Learning Active Subspaces and Discovering Important Features with Gaussian Radial Basis Functions Neural Networks".
+
+In machine learning, achieving a balance between predictive performance and interpretability remains a challenge. We propose a modification to the radial basis function neural network (RBFNN) model by incorporating a learnable precision matrix into the Gaussian kernel of the RBFNN. Valuable information can be extracted from the learned precision matrix spectrum (i.e., eigenvectors and eigenvalues):
+
+1. **Active subspace**: the directions of maximum variability of the model, aiding supervised dimensionality reduction tasks such as visualization.
+2. **Feature importance ranking**: how individual features contribute to the predictive performance of the model.
+
+Numerical experiments across regression, classification, and feature selection tasks demonstrate that the model maintains attractive prediction performance while providing transparent and interpretable results.
+ 
 ## Citation
 ```python
 @article{DAGOSTINO2024106335,
