@@ -41,9 +41,9 @@ class GaussianRBFNetworkC(nn.Module):
         return y_hat
 
     def evaluate_loss(self, y, y_hat):
-
+           
         bce_loss = nn.BCELoss()
-        loss = bce_loss(y, y_hat)
+        loss = bce_loss(y_hat, y)
         reg_gaussian = self.gaussian_regularizer * torch.linalg.norm(self.precision_elements)
         reg_centers = self.centers_regularizer * torch.linalg.norm(self.centers)
         reg_weights = self.weights_regularizer * torch.linalg.norm(self.weights)
